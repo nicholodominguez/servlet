@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="com.ecc.ems">
+  <class name="Employee" table="employee">
+    <meta attribute="class-description">
+      This class contains the employee detail.
+    </meta>
+    <id name="id" type="int" column="emp_id">
+      <generator class="sequence"/>
+    </id>
+    <component name="name" class="Name">
+        <property column="firstname" name="firstname" type="string"/>
+        <property column="middlename" name="middlename" type="string"/>
+        <property column="lastname" name="lastname" type="string"/>
+        <property column="suffix" name="suffix" type="string"/>
+        <property column="title" name="title" type="string"/>
+    </component>
+    <component name="address" class="Address">
+        <property column="street" name="street" type="string"/>
+        <property column="brgy" name="brgy" type="string"/>
+        <property column="municipality" name="municipality" type="string"/>
+        <property column="zipcode" name="zipcode" type="string"/>
+        <property column="country" name="country" type="string"/>
+    </component>
+    <set name="contacts" table="contact" cascade="save-update, delete" lazy="false">
+      <key column="emp_id" not-null="true" update="false"/>
+      <one-to-many class="Contact"/>
+    </set>
+    <property name="bdate" column="bdate" type="date"/>
+    <property name="gwa" column="gwa" type="double"/>
+    <property name="dateHired" column="date_hired" type="date"/>
+    <set name="roles" table="emp_role" cascade="save-update, all-delete-orphan" inverse="false" lazy="false" fetch="select">
+      <key column="emp_id" not-null="true" update="false"/>
+      <many-to-many column="role_id" class="Role" unique="true"/>
+    </set>
+    <property name="status" column="emp_status" type="boolean"/>
+  </class>
+</hibernate-mapping>
+

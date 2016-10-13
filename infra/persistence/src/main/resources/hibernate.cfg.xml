@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-configuration PUBLIC "-//Hibernate/Hibernate Configuration DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+  <session-factory>
+    <!--<property name="hibernate.dialect">
+      ${db.dialect}
+    </property>
+    <property name="hibernate.connection.driver_class">
+      ${db.driverClass}
+    </property>
+   
+    <property name="hibernate.connection.url">
+      ${db.url}
+    </property>
+    <property name="hibernate.connection.username">
+      ${db.username}
+    </property>
+    <property name="hibernate.connection.password">
+      ${db.password}
+    </property>-->
+    <property name="hibernate.dialect">
+      org.hibernate.dialect.PostgreSQLDialect
+    </property>
+    <property name="hibernate.connection.driver_class">
+      org.postgresql.Driver
+    </property>
+   
+    <property name="hibernate.connection.url">
+      jdbc:postgresql://localhost:5432/emsdb
+    </property>
+    <property name="hibernate.connection.username">
+      postgres
+    </property>
+    <property name="hibernate.connection.password">
+      postgres
+    </property>
+    <property name="hibernate.id.new_generator_mappings">
+      false
+    </property>
+    
+    <!-- List of XML mapping files -->
+    <mapping class="Employee"/>
+    <mapping class="Role"/>
+    <mapping class="Contact"/>
+  </session-factory>
+</hibernate-configuration>
+
