@@ -24,27 +24,27 @@ public class Name{
         this.title = title;
     }
     
-    @Column(name="firstname")
+    @Column (name = "firstname")
     public String getFirstname() {
         return firstname;
     }
     
-    @Column(name="middlename")
+    @Column (name = "middlename")
     public String getMiddlename() {
         return middlename;
     }
     
-    @Column(name="lastname")
+    @Column (name = "lastname")
     public String getLastname() {
         return lastname;
     }
     
-    @Column(name="suffix")
+    @Column (name = "suffix")
     public String getSuffix() {
         return suffix;
     }
     
-    @Column(name="title")
+    @Column(name = "title")
     public String getTitle() {
         return title;
     }
@@ -69,7 +69,7 @@ public class Name{
         this.title = title;
     }
     
-    public String getFullname() {
+    public String fullname() {
         String result = "";
         
         if(this.getTitle() != null){

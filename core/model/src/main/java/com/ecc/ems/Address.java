@@ -3,6 +3,10 @@ package com.ecc.ems;
 import java.util.List;
 import java.util.ArrayList;
 
+import javax.persistence.Embeddable;
+import javax.persistence.Column;
+
+@Embeddable
 public class Address{
     private String street;
     private String brgy;
@@ -20,22 +24,27 @@ public class Address{
         this.country = country;
     }
     
+    @Column (name = "street")
     public String getStreet() {
         return street;
     }
     
+    @Column (name = "brgy")
     public String getBrgy() {
         return brgy;
     }
     
+    @Column (name = "municipality")
     public String getMunicipality() {
         return municipality;
     }
     
+    @Column (name = "zipcode")
     public String getZipcode() {
         return zipcode;
     }
     
+    @Column (name = "country")
     public String getCountry() {
         return country;
     }

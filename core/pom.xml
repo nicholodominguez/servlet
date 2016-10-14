@@ -17,11 +17,4 @@
     <module>dao</module>
     <module>model</module>
   </modules>
-  
-  <dependencies>
-    <dependency>
-      <groupId>org.hibernate</groupId>
-      <artifactId>hibernate-core</artifactId>
-    </dependency>
-  </dependencies>
 </project>

@@ -6,9 +6,16 @@ import com.ecc.ems.Employee;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.persistence.Column;
+import javax.persistence.JoinTable;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
+import javax.persistence.CascadeType;
+import javax.persistence.FetchType;
+import javax.persistence.AttributeOverride;
 
 @Entity
 @Table (name = "role")
+@AttributeOverride(name = "id", column = @Column(name = "role_id"))
 public class Role extends BaseEntity{
     protected String name;
     protected Set<Employee> employees;
@@ -25,6 +32,16 @@ public class Role extends BaseEntity{
         return name;
     }
     
+    @ManyToMany(
+        targetEntity = com.ecc.ems.Employee.class,
+        fetch = FetchType.LAZY,
+        cascade = {CascadeType.PERSIST, CascadeType.MERGE}
+    )
+	@JoinTable(
+        name = "emp_role",
+	    joinColumns = { @JoinColumn(name = "role_id", nullable = false, updatable = false) },
+        inverseJoinColumns = { @JoinColumn(name = "emp_id", nullable = false, updatable = false) }
+    )
     public Set<Employee> getEmployees() {
         return employees;
     }

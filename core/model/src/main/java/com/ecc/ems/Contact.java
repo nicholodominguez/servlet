@@ -5,9 +5,11 @@ import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.persistence.Column;
+import javax.persistence.AttributeOverride;
 
 @Entity
 @Table (name = "contact")
+@AttributeOverride(name="id", column = @Column(name = "contact_id"))
 public class Contact extends BaseEntity{
     private String contactType;
     private String contactDetails;

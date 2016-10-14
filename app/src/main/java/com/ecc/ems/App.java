@@ -255,7 +255,9 @@ public class App{
                     }
                     break;
                 case 8:
-                    em.addEmployee(emp);
+                    if(!hasNullValues(emp)){
+                        em.addEmployee(emp);
+                    }
                     return;
                 case 9:
                     break;
@@ -828,7 +830,7 @@ public class App{
         Set<Role> roles;
         
         System.out.println();
-        System.out.println(" Are you sure you want to delete " + emp.getName().getFullname() + "?");
+        System.out.println(" Are you sure you want to delete " + emp.getName().fullname() + "?");
         System.out.println(" [1] Yes");
         System.out.println(" [2] No");
         choice = InputValidator.getInputMenu(" Option: ", 2);
@@ -843,5 +845,38 @@ public class App{
                 break;
         }
         System.out.println();
+    }
+    
+    public static boolean hasNullValues(Employee emp){
+        if( hasNullValues(emp.getName()) || 
+            hasNullValues(emp.getAddress()) || 
+            emp.getBdate() == null || 
+            emp.getGwa() == null || 
+            emp.getDateHired() == null ){
+                System.out.println("Save cancelled. Employee contains null values.");
+                return true;
+        }
+        return false;
+    }
+    
+    public static boolean hasNullValues(Address address){
+        if( emp.getAddress().getStreet() == null ||  
+            emp.getAddress().getBrgy() == null || 
+            emp.getAddress().getMunicipality() == null || 
+            emp.getAddress().getCountry() == null || 
+            emp.getAddress().getZipcode() == null  ){
+                System.out.println("Save cancelled. Address contains null values.");
+                return true;
+        }
+        return false;
+    }
+    
+    public static boolean hasNullValues(Name name){
+        if( emp.getName().getFirstname() == null || 
+            emp.getName().getLastname() == null ){
+                System.out.println("Save cancelled. Name contains null values.");
+                return true;
+        }
+        return false;
     }
 }

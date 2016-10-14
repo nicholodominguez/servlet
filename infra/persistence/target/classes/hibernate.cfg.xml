@@ -39,9 +39,10 @@
     </property>
     
     <!-- List of XML mapping files -->
-    <mapping resource="Employee.hbm.xml"/>
-    <mapping resource="Role.hbm.xml"/>
-    <mapping resource="Contact.hbm.xml"/>
+    <mapping package="com.ecc.ems"/>
+    <mapping class="com.ecc.ems.Employee"/>
+    <mapping class="com.ecc.ems.Role"/>
+    <mapping class="com.ecc.ems.Contact"/>
   </session-factory>
 </hibernate-configuration>
 

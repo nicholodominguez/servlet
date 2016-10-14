@@ -14,8 +14,21 @@ import com.ecc.ems.Address;
 import com.ecc.ems.Contact;
 import com.ecc.ems.Role;
 
+import javax.persistence.Entity;
+import javax.persistence.Table;
+import javax.persistence.Column;
+import javax.persistence.Embedded;
+import javax.persistence.OneToMany;
+import javax.persistence.ManyToMany;
+import javax.persistence.JoinTable;
+import javax.persistence.JoinColumn;
+import javax.persistence.CascadeType;
+import javax.persistence.FetchType;
+import javax.persistence.AttributeOverride;
+
 @Entity
 @Table(name="employee")
+@AttributeOverride(name = "id", column = @Column(name = "emp_id"))
 public class Employee extends BaseEntity implements Comparable<Employee>{
     private Name name;
     private Address address;
@@ -43,26 +56,48 @@ public class Employee extends BaseEntity implements Comparable<Employee>{
         return name;
     }
     
+    @Embedded
     public Address getAddress() {
         return address;
     }
     
+    @Column (name = "bdate")
     public Date getBdate() {
         return bdate;
     }
     
+    @Column (name = "gwa")
     public Double getGwa() {
         return gwa;
     }
     
+    @OneToMany(
+        cascade = CascadeType.ALL, 
+        fetch = FetchType.EAGER,
+        targetEntity = Contact.class 
+    )
+    @JoinColumn(
+        name = "emp_id"
+    )
     public Set getContacts() {
         return contacts;
     }
     
+    @Column (name = "date_hired")
     public Date getDateHired() {
         return dateHired;
     }
     
+    @ManyToMany(
+        cascade = {CascadeType.PERSIST, CascadeType.MERGE}, 
+        fetch = FetchType.EAGER,
+        targetEntity = Role.class
+    )
+    @JoinTable(
+        name = "emp_role",
+        joinColumns = { @JoinColumn(name = "emp_id", nullable = false, updatable = false) }, 
+        inverseJoinColumns = { @JoinColumn(name = "role_id", nullable = false, updatable = false) }
+    )
     public Set getRoles() {
         return roles;
     }
@@ -106,7 +141,7 @@ public class Employee extends BaseEntity implements Comparable<Employee>{
 	    ArrayList<String> list = new ArrayList();
 	    
 	    if(this.name != null){
-	        list.add("Name: " + this.name.getFullname());
+	        list.add("Name: " + this.name.fullname());
 	    }
 	    else{
 	        list.add("Name: ");

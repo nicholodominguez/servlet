@@ -4,6 +4,8 @@ package com.ecc.ems;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.Id;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Column;
 
 @MappedSuperclass
 class BaseEntity{
@@ -21,7 +23,7 @@ class BaseEntity{
     }
     
     @Id 
-    @GeneratedValue(strategy=GenerationType.SEQUENCE)
+    @GeneratedValue (strategy = GenerationType.SEQUENCE)
     public int getId() {
         return id;
     }
@@ -30,6 +32,7 @@ class BaseEntity{
         this.status = status;
     }
     
+    @Column (name = "status")
     public boolean getStatus(){
         return status;
     }

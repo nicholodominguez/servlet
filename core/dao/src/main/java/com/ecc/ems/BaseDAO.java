@@ -9,12 +9,10 @@ import java.io.Serializable;
 import java.util.List;
 
 import com.ecc.ems.BaseDAOInterface;
+import com.ecc.ems.HibernateUtil;
 
 public abstract class BaseDAO<T, Id extends Serializable> implements BaseDAOInterface<T, Id>{
     
-    protected SessionFactory factory;
-    protected Session currentSession;
-    protected Transaction currentTransaction;
     protected Class<T> clazz;
     
     public BaseDAO(SessionFactory factory, Class<T> clazz) {
@@ -23,17 +21,12 @@ public abstract class BaseDAO<T, Id extends Serializable> implements BaseDAOInte
     }
     
     public void saveOrUpdate(T entity) {
-        this.currentSession = factory.openSession();
         
         try{
-            this.currentTransaction = this.currentSession.beginTransaction();
-            this.currentSession.saveOrUpdate(entity);
-            this.currentSession.flush();
-            this.currentTransaction.commit();
+            HibernateUtil.getCurrentSession().saveOrUpdate(entity);
+            HibernateUtil.commit();
         }catch (HibernateException e) {
-            if (this.currentTransaction != null) {
-                this.currentTransaction.rollback();
-            }
+            HibernateUtil.rollback(); //CONTINUE HERE
         }finally {
             this.currentSession.close();
         }
