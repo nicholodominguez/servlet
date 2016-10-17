@@ -3,11 +3,18 @@ package com.ecc.ems;
 import java.util.List;
 
 import javax.persistence.Entity;
+import javax.persistence.Cacheable;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 import javax.persistence.Table;
 import javax.persistence.Column;
 import javax.persistence.AttributeOverride;
 
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 @Entity
+@Cacheable
+@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE, region = "Contact")
 @Table (name = "contact")
 @AttributeOverride(name="id", column = @Column(name = "contact_id"))
 public class Contact extends BaseEntity{

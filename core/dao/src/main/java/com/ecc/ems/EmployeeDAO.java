@@ -7,73 +7,67 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Criteria; 
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.criterion.Disjunction;
 import org.hibernate.criterion.Projections;
+import org.hibernate.criterion.MatchMode;
 
 import com.ecc.ems.Employee;
 import com.ecc.ems.EmployeeDAOInterface;
 import com.ecc.ems.BaseDAO;
+import com.ecc.ems.HibernateUtil;
+
 import java.util.List;
 import java.util.Collections;
 
 public class EmployeeDAO extends BaseDAO<Employee, Integer> implements EmployeeDAOInterface{
-    
-    private Criteria crit;
-    
-    public EmployeeDAO(SessionFactory factory) {
-        super(factory, Employee.class);
+        
+    public EmployeeDAO() {
+        super(Employee.class);
+        HibernateUtil.createNewSession();
     }
     
     public List<Employee> sortByLastname(boolean ifAscending){
         
         List<Employee> entities = null;
-        this.currentSession = factory.openSession();
-	    this.crit = this.currentSession.createCriteria(Employee.class).setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
-	    
+        Criteria crit = HibernateUtil.createAndGetCurrentSession().createCriteria(Employee.class).setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+        
 	    if(ifAscending){
-	        this.crit.addOrder( Order.asc("name.lastname") );    
+	        crit.addOrder( Order.asc("name.lastname") );    
 	    }
 	    else{
-	        this.crit.addOrder( Order.desc("name.lastname") );
+	        crit.addOrder( Order.desc("name.lastname") );
 	    }
-	    
-	    try{
-            this.currentTransaction = this.currentSession.beginTransaction();
-            entities = this.crit.list();
-            this.currentTransaction.commit();
+        
+        try{
+            entities = crit.list();
         }catch (HibernateException e) {
-            if (this.currentTransaction != null) {
-                this.currentTransaction.rollback();
-            }
+            HibernateUtil.rollback(); 
         }finally {
-            this.currentSession.close();
-        }    
-	    
+            HibernateUtil.closeCurrentSession();
+        }
+        
 	    return entities;
     }
     
     public List<Employee> sortByDateHired(boolean ifAscending){
         
         List<Employee> entities = null;
-        this.currentSession = factory.openSession();
-	    this.crit = this.currentSession.createCriteria(Employee.class).setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
-	    
+        Criteria crit = HibernateUtil.createAndGetCurrentSession().createCriteria(Employee.class).setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+        
 	    if(ifAscending){
-	        this.crit.addOrder( Order.asc("dateHired") );    
+	        crit.addOrder( Order.asc("dateHired") );    
 	    }
 	    else{
-	        this.crit.addOrder( Order.desc("dateHired") );
+	        crit.addOrder( Order.desc("dateHired") );
 	    }
 	    
 	    try{
-            this.currentTransaction = this.currentSession.beginTransaction();
-            entities = this.crit.list();
-            this.currentTransaction.commit();
+            entities = crit.list();
+            HibernateUtil.commit();
         }catch (HibernateException e) {
-            if (this.currentTransaction != null) {
-                this.currentTransaction.rollback();
-            }
+            HibernateUtil.rollback(); 
         }finally {
-            this.currentSession.close();
+            HibernateUtil.closeCurrentSession();
         }    
 	    
 	    return entities;
@@ -83,24 +77,20 @@ public class EmployeeDAO extends BaseDAO<Employee, Integer> implements EmployeeD
     public List<Employee> sortByGwa(boolean ifAscending){
     
         List<Employee> entities = null;
-        this.currentSession = factory.openSession();
 	    
 	    try{
-            this.currentTransaction = this.currentSession.beginTransaction();
-            entities = (List<Employee>) this.currentSession.createQuery("from Employee").list();
+            entities = (List<Employee>) HibernateUtil.createAndGetCurrentSession().createQuery("from Employee").list();
             if (ifAscending){
                 Collections.sort(entities, Collections.reverseOrder());
             }
             else{
                 Collections.sort(entities);
             }
-            this.currentTransaction.commit();
+            HibernateUtil.commit();
         }catch (HibernateException e) {
-            if (this.currentTransaction != null) {
-                this.currentTransaction.rollback();
-            }
+            HibernateUtil.rollback(); 
         }finally {
-            this.currentSession.close();
+            HibernateUtil.closeCurrentSession();
         }    
 	    
 	    return entities;
@@ -109,8 +99,7 @@ public class EmployeeDAO extends BaseDAO<Employee, Integer> implements EmployeeD
     public List<Employee> searchEmployee(String keyword){
     
         List<Employee> entities = null;
-        this.currentSession = factory.openSession();
-	    this.crit = this.currentSession.createCriteria(Employee.class).add(Restrictions.disjunction()
+        Criteria crit = HibernateUtil.createAndGetCurrentSession().createCriteria(Employee.class).add(Restrictions.disjunction()
 	                  .add(Restrictions.sqlRestriction("firstname like '%"+keyword+"%'"))
 	                  .add(Restrictions.sqlRestriction("middlename like '%"+keyword+"%'"))
 	                  .add(Restrictions.sqlRestriction("lastname like '%"+keyword+"%'"))
@@ -118,15 +107,13 @@ public class EmployeeDAO extends BaseDAO<Employee, Integer> implements EmployeeD
 	                  .setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 	    
 	    try{
-            this.currentTransaction = this.currentSession.beginTransaction();
-            entities = this.crit.list();
-            this.currentTransaction.commit();
+            entities = (List<Employee>) crit.list();
+            System.out.println(entities);
+            HibernateUtil.commit();
         }catch (HibernateException e) {
-            if (this.currentTransaction != null) {
-                this.currentTransaction.rollback();
-            }
+	        HibernateUtil.rollback(); 
         }finally {
-            this.currentSession.close();
+	        HibernateUtil.closeCurrentSession();
         }    
 	    
 	    return entities;

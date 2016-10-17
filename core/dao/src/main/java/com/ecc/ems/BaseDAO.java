@@ -15,54 +15,43 @@ public abstract class BaseDAO<T, Id extends Serializable> implements BaseDAOInte
     
     protected Class<T> clazz;
     
-    public BaseDAO(SessionFactory factory, Class<T> clazz) {
-        this.factory = factory;    
+    public BaseDAO(Class<T> clazz) {    
         this.clazz = clazz;
     }
     
     public void saveOrUpdate(T entity) {
-        
         try{
-            HibernateUtil.getCurrentSession().saveOrUpdate(entity);
+            HibernateUtil.createAndGetCurrentSession().saveOrUpdate(entity);
             HibernateUtil.commit();
         }catch (HibernateException e) {
-            HibernateUtil.rollback(); //CONTINUE HERE
+            HibernateUtil.rollback(); 
         }finally {
-            this.currentSession.close();
+            HibernateUtil.closeCurrentSession();
         }
     }
     
     public void update(T entity) {
-        this.currentSession = factory.openSession();
         
         try{
-            this.currentTransaction = this.currentSession.beginTransaction();
-            this.currentSession.update(entity);
-            this.currentSession.flush();
-            this.currentTransaction.commit();
+            HibernateUtil.createAndGetCurrentSession().update(entity);
+            HibernateUtil.commit();
         }catch (HibernateException e) {
-            if (this.currentTransaction != null) {
-                this.currentTransaction.rollback();
-            }
+            HibernateUtil.rollback(); 
         }finally {
-            this.currentSession.close();
+            HibernateUtil.closeCurrentSession();
         }
     }
     
     public T findById(Id id) {
         T entity = null;
-        this.currentSession = factory.openSession();
         
         try{
-            this.currentTransaction = this.currentSession.beginTransaction();
-            entity = (T) this.currentSession.get(this.clazz.getName(), id);
-            this.currentTransaction.commit();
+            entity = clazz.cast(HibernateUtil.createAndGetCurrentSession().get(clazz.getName(), id));
+            HibernateUtil.commit();
         }catch (HibernateException e) {
-            if (this.currentTransaction != null) {
-                this.currentTransaction.rollback();
-            }
+            HibernateUtil.rollback();
         }finally {
-            this.currentSession.close();
+            HibernateUtil.closeCurrentSession();
         }
         
         return entity;
@@ -70,38 +59,28 @@ public abstract class BaseDAO<T, Id extends Serializable> implements BaseDAOInte
     
     public List<T> findAll(String query) {
         List<T> entities = null;
-        this.currentSession = this.factory.openSession();
 	    
-	    try{
-            this.currentTransaction = this.currentSession.beginTransaction();
-            entities = (List<T>) this.currentSession.createQuery(query).list();
-            this.currentTransaction.commit();
+        try{
+            entities = (List<T>) HibernateUtil.createAndGetCurrentSession().createQuery(query).list();
+            HibernateUtil.commit();
         }catch (HibernateException e) {
-            if (this.currentTransaction != null) {
-                this.currentTransaction.rollback();
-            }
-            System.out.println(e);
+            HibernateUtil.rollback(); //CONTINUE HERE
         }finally {
-            this.currentSession.close();
-        }    
+            HibernateUtil.closeCurrentSession();
+        }
 	    
 	    return entities;
     }
     
     public void delete(T entity){
-        this.currentSession = factory.openSession();
-        
+                
         try{
-            this.currentTransaction = this.currentSession.beginTransaction();
-            this.currentSession.delete(entity);
-            this.currentSession.flush();
-            this.currentTransaction.commit();
+            HibernateUtil.createAndGetCurrentSession().delete(entity);
+            HibernateUtil.commit();
         }catch (HibernateException e) {
-            if (this.currentTransaction != null) {
-                this.currentTransaction.rollback();
-            }
+            HibernateUtil.rollback(); 
         }finally {
-            this.currentSession.close();
-        }   
+            HibernateUtil.closeCurrentSession();
+        }
     }
 }

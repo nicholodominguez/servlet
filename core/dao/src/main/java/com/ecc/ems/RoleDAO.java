@@ -9,39 +9,39 @@ import org.hibernate.criterion.Disjunction;
 import org.hibernate.criterion.Restrictions;
 
 import com.ecc.ems.Role;
+import com.ecc.ems.RoleDAOInterface;
+import com.ecc.ems.BaseDAO;
+import com.ecc.ems.HibernateUtil;
+
 import java.util.List;
 import java.util.Set;
 import java.util.Collection;
 
 public class RoleDAO extends BaseDAO<Role, Integer> implements RoleDAOInterface{
         
-    public RoleDAO(SessionFactory factory){
-        super(factory, Role.class);
+    public RoleDAO(){
+        super(Role.class);
     }
         
     public List<Role> getAssignableRoles(Set<Role> roles){
         List<Role> entities = null;
-        this.currentSession = factory.openSession();
         
-	    Criteria crit = this.currentSession.createCriteria(Role.class);
+	    Criteria crit = HibernateUtil.createAndGetCurrentSession().createCriteria(Role.class);
 	    Disjunction disj = Restrictions.disjunction();
 	    
 	    for(Role role : roles){
-	        disj.add(Restrictions.sqlRestriction("role_name != '" + role.getName() + "'"));
+	        disj.add(Restrictions.ne("role_name", role.getName()));
 	    }
 	    
 	    crit.add(disj);
 	    
 	    try{
-            this.currentTransaction = this.currentSession.beginTransaction();
             entities = crit.list();
-            this.currentTransaction.commit();
+            HibernateUtil.commit();
         }catch (HibernateException e) {
-            if (this.currentTransaction != null) {
-                this.currentTransaction.rollback();
-            }
+            HibernateUtil.rollback();
         }finally {
-            this.currentSession.close();
+            HibernateUtil.closeCurrentSession();
         }    
 	    
 	    return entities;

@@ -10,9 +10,9 @@ import org.hibernate.cfg.Configuration;
 
 public class HibernateUtil{
     
-    public static final SessionFactory factory;
-    public static final Transaction currentTransaction;
-    public static final Session currentsession;
+    private static final SessionFactory factory;
+    private static Transaction currentTransaction;
+    private static Session currentSession;
     
     static{
         try {
@@ -26,14 +26,36 @@ public class HibernateUtil{
         }
     }
     
-    public static Session getCurrentSession(){
+    public static void createNewSession(){
         currentSession = factory.openSession();
-        
-        currentTransaction = session.beginTransaction();
+    }
+    
+    public static Session getCurrentSession(){
         return currentSession;
     }
-
+    
+    public static Session createAndGetCurrentSession(){
+        createNewSession();
+        
+        currentTransaction = currentSession.beginTransaction();
+        return getCurrentSession();
+    }
+    
+    public static void closeCurrentSession(){
+        currentSession.close();
+    }
+    
     public static void commit(){
-        this.currentTransaction.commit();
+        currentTransaction.commit();
+    }
+
+    public static void rollback(){
+        if(currentTransaction != null){
+            currentTransaction.rollback();
+        }
+    }
+    
+    public static void closeSessionFactory(){
+        factory.close();
     }
 }

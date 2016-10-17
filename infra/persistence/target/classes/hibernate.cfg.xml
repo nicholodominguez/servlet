@@ -38,6 +38,18 @@
       false
     </property>
     
+    <!-- Caching -->
+    
+    <property name="hibernate.cache.use_second_level_cache">
+      true
+    </property>
+    <property name="hibernate.cache.region.factory_class">
+      org.hibernate.cache.ehcache.EhCacheRegionFactory
+    </property>
+    <property name="net.sf.ehcache.configurationResourceName">
+      ehcache-config.xml
+    </property>
+    
     <!-- List of XML mapping files -->
     <mapping package="com.ecc.ems"/>
     <mapping class="com.ecc.ems.Employee"/>

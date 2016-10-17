@@ -3,7 +3,7 @@ package com.ecc.ems;
 import java.util.List;
 import java.util.Set;
 
-
+import com.ecc.ems.HibernateUtil;
 import com.ecc.ems.EmployeeDAO;
 import com.ecc.ems.RoleDAO;
 import com.ecc.ems.Employee;
@@ -14,9 +14,9 @@ public class EmployeeService{
     private EmployeeDAO emDao;
     private RoleDAO roleDao;
     
-    public EmployeeService() {
-        
-        
+    public EmployeeService() {  
+        emDao = new EmployeeDAO();
+        roleDao = new RoleDAO();
     }
     
     public void addEmployee(Employee emp){
@@ -95,6 +95,10 @@ public class EmployeeService{
     
     public void deleteRole(Role role){
         roleDao.delete(role);
+    }
+    
+    public void terminate(){
+        HibernateUtil.closeSessionFactory();
     }
 
 }

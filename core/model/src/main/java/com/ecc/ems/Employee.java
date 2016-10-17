@@ -15,6 +15,7 @@ import com.ecc.ems.Contact;
 import com.ecc.ems.Role;
 
 import javax.persistence.Entity;
+import javax.persistence.Cacheable;
 import javax.persistence.Table;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
@@ -26,7 +27,11 @@ import javax.persistence.CascadeType;
 import javax.persistence.FetchType;
 import javax.persistence.AttributeOverride;
 
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 @Entity
+@Cacheable
+@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE, region="Employee")
 @Table(name="employee")
 @AttributeOverride(name = "id", column = @Column(name = "emp_id"))
 public class Employee extends BaseEntity implements Comparable<Employee>{
@@ -76,6 +81,10 @@ public class Employee extends BaseEntity implements Comparable<Employee>{
         fetch = FetchType.EAGER,
         targetEntity = Contact.class 
     )
+    @Cache(
+        usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE,
+        region = "Contact"
+    )
     @JoinColumn(
         name = "emp_id"
     )
@@ -92,6 +101,10 @@ public class Employee extends BaseEntity implements Comparable<Employee>{
         cascade = {CascadeType.PERSIST, CascadeType.MERGE}, 
         fetch = FetchType.EAGER,
         targetEntity = Role.class
+    )
+    @Cache(
+        usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE,
+        region = "Role"
     )
     @JoinTable(
         name = "emp_role",

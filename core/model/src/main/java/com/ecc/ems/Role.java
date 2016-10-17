@@ -4,6 +4,7 @@ import java.util.Set;
 import com.ecc.ems.Employee;
 
 import javax.persistence.Entity;
+import javax.persistence.Cacheable;
 import javax.persistence.Table;
 import javax.persistence.Column;
 import javax.persistence.JoinTable;
@@ -13,7 +14,12 @@ import javax.persistence.CascadeType;
 import javax.persistence.FetchType;
 import javax.persistence.AttributeOverride;
 
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
 @Entity
+@Cacheable
+@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE, region = "Role")
 @Table (name = "role")
 @AttributeOverride(name = "id", column = @Column(name = "role_id"))
 public class Role extends BaseEntity{

@@ -13,12 +13,9 @@
   
   <dependencies>
     <dependency>
-      <groupId>org.hibernate</groupId>
-      <artifactId>hibernate-core</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.hibernate</groupId>
-      <artifactId>hibernate-annotations</artifactId>
+      <groupId>com.ecc.ems</groupId>
+      <artifactId>persistence</artifactId>
+      <version>${project.version}</version>
     </dependency>
   </dependencies>
 </project>

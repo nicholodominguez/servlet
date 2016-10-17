@@ -34,12 +34,16 @@ public class App{
                 case 3:
                     emp = App.searchEmployee(em, "edit");
                     
-                    App.editEmployee(em, emp);
+                    if(emp != null){
+                        App.editEmployee(em, emp);
+                    }
                     break;
                 case 4:
                     emp = App.searchEmployee(em, "delete");
                     
-                    App.deleteEmployee(em, emp);
+                    if(emp != null){
+                        App.deleteEmployee(em, emp);
+                    }
                     break;
                 case 5:                    
                     App.addNewRoleType(em);
@@ -51,6 +55,7 @@ public class App{
                     App.deleteRoleType(em);
                     break;
                 case 8:
+                    em.terminate();
                     System.exit(0);
                     break;
                 default:
@@ -612,7 +617,7 @@ public class App{
         
         input = InputValidator.getInputStr("Enter name of employee to " + type + ": ", 30);
         empList = es.searchEmployeeByName(input);
-        if(empList == null){
+        if(empList == null || empList.size() == 0){
             System.out.println("No employee found.");
             return temp;
         }
@@ -860,11 +865,11 @@ public class App{
     }
     
     public static boolean hasNullValues(Address address){
-        if( emp.getAddress().getStreet() == null ||  
-            emp.getAddress().getBrgy() == null || 
-            emp.getAddress().getMunicipality() == null || 
-            emp.getAddress().getCountry() == null || 
-            emp.getAddress().getZipcode() == null  ){
+        if( address.getStreet() == null ||  
+            address.getBrgy() == null || 
+            address.getMunicipality() == null || 
+            address.getCountry() == null || 
+            address.getZipcode() == null  ){
                 System.out.println("Save cancelled. Address contains null values.");
                 return true;
         }
@@ -872,8 +877,8 @@ public class App{
     }
     
     public static boolean hasNullValues(Name name){
-        if( emp.getName().getFirstname() == null || 
-            emp.getName().getLastname() == null ){
+        if( name.getFirstname() == null || 
+            name.getLastname() == null ){
                 System.out.println("Save cancelled. Name contains null values.");
                 return true;
         }
