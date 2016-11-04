@@ -13,6 +13,19 @@ import com.ecc.ems.Name;
 import com.ecc.ems.Address;
 import com.ecc.ems.Contact;
 import com.ecc.ems.Role;
+/*
+import javax.persistence.Entity;
+import javax.persistence.Cacheable;
+import javax.persistence.Table;
+import javax.persistence.Column;
+import javax.persistence.Embedded;
+import javax.persistence.OneToMany;
+import javax.persistence.ManyToMany;
+import javax.persistence.JoinTable;
+import javax.persistence.JoinColumn;
+import javax.persistence.CascadeType;
+import javax.persistence.FetchType;
+import javax.persistence.AttributeOverride;*/
 
 import javax.persistence.Entity;
 import javax.persistence.Cacheable;
@@ -27,8 +40,13 @@ import javax.persistence.CascadeType;
 import javax.persistence.FetchType;
 import javax.persistence.AttributeOverride;
 
+import org.hibernate.annotations.Cascade;
+//import org.hibernate.annotations.CascadeType;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+
 @Entity
 @Cacheable
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE, region="Employee")
@@ -77,16 +95,16 @@ public class Employee extends BaseEntity implements Comparable<Employee>{
     }
     
     @OneToMany(
-        cascade = CascadeType.ALL, 
-        fetch = FetchType.EAGER,
-        targetEntity = Contact.class 
+        cascade = {CascadeType.ALL},
+        orphanRemoval = true, 
+        targetEntity = Contact.class,
+        mappedBy="emp"
     )
+    @Cascade(org.hibernate.annotations.CascadeType.DELETE_ORPHAN)
+    @LazyCollection( LazyCollectionOption.FALSE )
     @Cache(
         usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE,
         region = "Contact"
-    )
-    @JoinColumn(
-        name = "emp_id"
     )
     public Set getContacts() {
         return contacts;
@@ -98,7 +116,7 @@ public class Employee extends BaseEntity implements Comparable<Employee>{
     }
     
     @ManyToMany(
-        cascade = {CascadeType.PERSIST, CascadeType.MERGE}, 
+        cascade = {CascadeType.ALL},
         fetch = FetchType.EAGER,
         targetEntity = Role.class
     )
@@ -149,7 +167,7 @@ public class Employee extends BaseEntity implements Comparable<Employee>{
 	}
 	
 	public List<String> stringify() {
-	    DateFormat df = new SimpleDateFormat("MMM/dd/yyyy");
+	    DateFormat df = new SimpleDateFormat("MMMMM/dd/yyyy");
 	    
 	    ArrayList<String> list = new ArrayList();
 	    

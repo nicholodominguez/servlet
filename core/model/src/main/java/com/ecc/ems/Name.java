@@ -72,7 +72,7 @@ public class Name{
     public String fullname() {
         String result = "";
         
-        if(this.getTitle() != null){
+        if(this.getTitle() != null && this.getTitle().compareTo("") != 0){
 	        result = result.concat(this.getTitle());
 	    }
 	    
@@ -88,7 +88,7 @@ public class Name{
 	        result = result.concat(" ").concat(this.getLastname());
 	    }
 	    
-	    if(this.getSuffix() != null){
+	    if(this.getSuffix() != null && this.getSuffix().compareTo("") != 0){
 	        result = result.concat(", ").concat(this.getSuffix());
 	    }
 	    

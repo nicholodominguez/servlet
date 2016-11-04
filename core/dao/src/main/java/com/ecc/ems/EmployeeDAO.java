@@ -41,6 +41,7 @@ public class EmployeeDAO extends BaseDAO<Employee, Integer> implements EmployeeD
         try{
             entities = crit.list();
         }catch (HibernateException e) {
+            e.printStackTrace();
             HibernateUtil.rollback(); 
         }finally {
             HibernateUtil.closeCurrentSession();
@@ -65,6 +66,7 @@ public class EmployeeDAO extends BaseDAO<Employee, Integer> implements EmployeeD
             entities = crit.list();
             HibernateUtil.commit();
         }catch (HibernateException e) {
+            e.printStackTrace();
             HibernateUtil.rollback(); 
         }finally {
             HibernateUtil.closeCurrentSession();
@@ -88,6 +90,7 @@ public class EmployeeDAO extends BaseDAO<Employee, Integer> implements EmployeeD
             }
             HibernateUtil.commit();
         }catch (HibernateException e) {
+            e.printStackTrace();
             HibernateUtil.rollback(); 
         }finally {
             HibernateUtil.closeCurrentSession();
@@ -111,6 +114,7 @@ public class EmployeeDAO extends BaseDAO<Employee, Integer> implements EmployeeD
             System.out.println(entities);
             HibernateUtil.commit();
         }catch (HibernateException e) {
+            e.printStackTrace();
 	        HibernateUtil.rollback(); 
         }finally {
 	        HibernateUtil.closeCurrentSession();

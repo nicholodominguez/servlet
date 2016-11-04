@@ -3,20 +3,19 @@ package com.ecc.ems;
 import java.util.List;
 import java.util.Set;
 
-import com.ecc.ems.HibernateUtil;
 import com.ecc.ems.EmployeeDAO;
-import com.ecc.ems.RoleDAO;
 import com.ecc.ems.Employee;
-import com.ecc.ems.Role;
+import com.ecc.ems.ContactDAO;
+import com.ecc.ems.Contact;
 
 public class EmployeeService{
     
     private EmployeeDAO emDao;
-    private RoleDAO roleDao;
+    private ContactDAO conDao;
     
     public EmployeeService() {  
         emDao = new EmployeeDAO();
-        roleDao = new RoleDAO();
+        conDao = new ContactDAO();
     }
     
     public void addEmployee(Employee emp){
@@ -30,7 +29,6 @@ public class EmployeeService{
     public List<Employee> listEmployee(){
         List<Employee> empList = null;
         empList = emDao.findAll("from Employee");
-        
         return empList;
     }
     
@@ -66,39 +64,22 @@ public class EmployeeService{
         return empList;
     }
     
-    public List<Role> getAvailableRoles(Set<Role> roles){
-        List<Role> roleList = null;
+    public Employee searchEmployeeById(int id){
+        Employee employee = null;
         
-        if(roles.size() > 0){
-            roleList = roleDao.getAssignableRoles(roles);
-        }
-        else{
-            roleList = roleDao.findAll("from Role");
-        }
-        return roleList;
+        employee = emDao.findById(id);
+        return employee;
     }
     
-    public void addRole(Role role){
-        roleDao.saveOrUpdate(role);
-    }
-    
-    public List<Role> listRoles(){
-        List<Role> roleList = null;
-        roleList = roleDao.findAll("from Role");
+    public Contact findContactById(int id) {
+        Contact contact = null;
         
-        return roleList;
+        contact = conDao.findById(id);
+        return contact;
     }
     
-    public void updateRole(Role role){
-        roleDao.update(role);
-    }
-    
-    public void deleteRole(Role role){
-        roleDao.delete(role);
-    }
-    
-    public void terminate(){
-        HibernateUtil.closeSessionFactory();
+    public void saveOrUpdateContact(Contact contact){
+        conDao.saveOrUpdate(contact);
     }
 
 }

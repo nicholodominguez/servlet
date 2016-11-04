@@ -3,20 +3,20 @@
 <hibernate-configuration>
   <session-factory>
     <property name="hibernate.dialect">
-      ${db.dialect}
+      org.hibernate.dialect.PostgreSQLDialect
     </property>
     <property name="hibernate.connection.driver_class">
-      ${db.driverClass}
+      org.postgresql.Driver
     </property>
    
     <property name="hibernate.connection.url">
-      ${db.url}
+      jdbc:postgresql://localhost:5432/emsdb
     </property>
     <property name="hibernate.connection.username">
-      ${db.username}
+      postgres
     </property>
     <property name="hibernate.connection.password">
-      ${db.password}
+      postgres
     </property>
    
     <!-- Caching -->

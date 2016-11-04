@@ -10,10 +10,11 @@ import javax.persistence.Column;
 import javax.persistence.JoinTable;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
-import javax.persistence.CascadeType;
 import javax.persistence.FetchType;
 import javax.persistence.AttributeOverride;
 
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -40,9 +41,9 @@ public class Role extends BaseEntity{
     
     @ManyToMany(
         targetEntity = com.ecc.ems.Employee.class,
-        fetch = FetchType.LAZY,
-        cascade = {CascadeType.PERSIST, CascadeType.MERGE}
+        fetch = FetchType.EAGER
     )
+    @Cascade( CascadeType.ALL )
 	@JoinTable(
         name = "emp_role",
 	    joinColumns = { @JoinColumn(name = "role_id", nullable = false, updatable = false) },

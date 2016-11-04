@@ -24,6 +24,7 @@ public abstract class BaseDAO<T, Id extends Serializable> implements BaseDAOInte
             HibernateUtil.createAndGetCurrentSession().saveOrUpdate(entity);
             HibernateUtil.commit();
         }catch (HibernateException e) {
+            e.printStackTrace();
             HibernateUtil.rollback(); 
         }finally {
             HibernateUtil.closeCurrentSession();
@@ -34,8 +35,11 @@ public abstract class BaseDAO<T, Id extends Serializable> implements BaseDAOInte
         
         try{
             HibernateUtil.createAndGetCurrentSession().update(entity);
+            
+            System.out.println("EMDAO HERE");
             HibernateUtil.commit();
         }catch (HibernateException e) {
+            e.printStackTrace();
             HibernateUtil.rollback(); 
         }finally {
             HibernateUtil.closeCurrentSession();
@@ -49,6 +53,7 @@ public abstract class BaseDAO<T, Id extends Serializable> implements BaseDAOInte
             entity = clazz.cast(HibernateUtil.createAndGetCurrentSession().get(clazz.getName(), id));
             HibernateUtil.commit();
         }catch (HibernateException e) {
+            e.printStackTrace();
             HibernateUtil.rollback();
         }finally {
             HibernateUtil.closeCurrentSession();
@@ -64,7 +69,8 @@ public abstract class BaseDAO<T, Id extends Serializable> implements BaseDAOInte
             entities = (List<T>) HibernateUtil.createAndGetCurrentSession().createQuery(query).list();
             HibernateUtil.commit();
         }catch (HibernateException e) {
-            HibernateUtil.rollback(); //CONTINUE HERE
+            e.printStackTrace();
+            HibernateUtil.rollback();
         }finally {
             HibernateUtil.closeCurrentSession();
         }
@@ -78,6 +84,7 @@ public abstract class BaseDAO<T, Id extends Serializable> implements BaseDAOInte
             HibernateUtil.createAndGetCurrentSession().delete(entity);
             HibernateUtil.commit();
         }catch (HibernateException e) {
+            e.printStackTrace();
             HibernateUtil.rollback(); 
         }finally {
             HibernateUtil.closeCurrentSession();

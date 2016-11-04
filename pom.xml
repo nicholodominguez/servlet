@@ -13,7 +13,7 @@
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.version>3.5.1</maven.compiler.version>
-    <maven.assembly.version>2.6</maven.assembly.version>
+    <maven.war.version>3.0.0</maven.war.version>
     <hibernate.version>4.3.11.Final</hibernate.version>
     <annotation.version>3.5.6-Final</annotation.version>
     <cache.version>4.3.11.Final</cache.version>
@@ -22,6 +22,8 @@
     <postgres.version>9.4.1211.jre7</postgres.version>
     <commons.lang3.version>3.4</commons.lang3.version>
     <maven.resources.version>3.0.1</maven.resources.version>
+    <jetty.version>9.3.12.v20160915</jetty.version>
+    <javax.servlet.version>3.1.0</javax.servlet.version>
     <project.rootdir>${basedir}</project.rootdir>
   </properties>
   
@@ -67,6 +69,11 @@
         <artifactId>postgresql</artifactId>
         <version>${postgres.version}</version>
       </dependency>
+      <dependency>
+        <groupId>javax.servlet</groupId>
+        <artifactId>javax.servlet-api</artifactId>
+        <version>${javax.servlet.version}</version>
+      </dependency>
     </dependencies>
   </dependencyManagement>
   
@@ -83,12 +90,17 @@
           </configuration>
         </plugin>
         <plugin>
-          <artifactId>maven-assembly-plugin</artifactId>
-          <version>${maven.assembly.version}</version>
+          <artifactId>maven-war-plugin</artifactId>
+          <version>${maven.war.version}</version>
         </plugin>
         <plugin>
           <artifactId>maven-resources-plugin</artifactId>
           <version>${maven.resources.version}</version>
+        </plugin>
+        <plugin>
+          <groupId>org.eclipse.jetty</groupId>
+          <artifactId>jetty-maven-plugin</artifactId>
+          <version>${jetty.version}</version>
         </plugin>
       </plugins>
      </pluginManagement>

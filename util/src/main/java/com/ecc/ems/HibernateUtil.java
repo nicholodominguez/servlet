@@ -8,6 +8,8 @@ import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 
+import java.util.Map;
+
 public class HibernateUtil{
     
     private static final SessionFactory factory;
@@ -18,7 +20,7 @@ public class HibernateUtil{
         try {
             Configuration config = new Configuration().configure();
             StandardServiceRegistry registry = new StandardServiceRegistryBuilder().applySettings(config.getProperties()).build();
-            factory = config.buildSessionFactory(registry); //CONTINUE HERE
+            factory = config.buildSessionFactory(registry);
         }
         catch(HibernateException e){
             System.out.println("Initial creation failed. " + e);
@@ -34,6 +36,10 @@ public class HibernateUtil{
         return currentSession;
     }
     
+    public static void createNewTransaction(){
+        currentTransaction = currentSession.beginTransaction();
+    }
+    
     public static Session createAndGetCurrentSession(){
         createNewSession();
         
@@ -42,7 +48,9 @@ public class HibernateUtil{
     }
     
     public static void closeCurrentSession(){
-        currentSession.close();
+        if(currentSession.isOpen()){
+            currentSession.close();
+        }
     }
     
     public static void commit(){

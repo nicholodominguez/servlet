@@ -4,14 +4,17 @@ import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.Cacheable;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
+import javax.persistence.ManyToOne;
+import javax.persistence.JoinColumn;
 import javax.persistence.Table;
 import javax.persistence.Column;
 import javax.persistence.AttributeOverride;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+
+import com.ecc.ems.Employee;
+
 @Entity
 @Cacheable
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE, region = "Contact")
@@ -20,15 +23,15 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 public class Contact extends BaseEntity{
     private String contactType;
     private String contactDetails;
-    private int empId;
+    private Employee emp;
     
     public Contact() {}
     
-    public Contact(String contactType, String contactDetails, int empId, boolean status) {
+    public Contact(String contactType, String contactDetails, Employee emp, boolean status) {
         super(status);
         this.contactType = contactType;
-        this.empId = empId;
-        this.contactDetails = contactDetails;    
+        this.contactDetails = contactDetails;
+        this.emp = emp;    
     }
     
     @Column (name = "contact_type")
@@ -41,9 +44,13 @@ public class Contact extends BaseEntity{
         return contactDetails;
     }
     
-    @Column (name = "emp_id")
-    public int getEmpId() {
-        return empId;
+    @ManyToOne
+    @JoinColumn(
+        name = "emp_id",
+        nullable = false
+    )
+    public Employee getEmp(){
+        return emp;
     }
     
     public void setContactType(String contactType) {
@@ -54,8 +61,8 @@ public class Contact extends BaseEntity{
         this.contactDetails = contactDetails;
     }
     
-    public void setEmpId(int empId) {
-        this.empId = empId;
+    public void setEmp(Employee emp){
+        this.emp = emp;
     }
     
     public String stringify(){

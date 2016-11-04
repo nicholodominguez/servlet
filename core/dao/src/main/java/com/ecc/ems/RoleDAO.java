@@ -7,6 +7,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Criteria; 
 import org.hibernate.criterion.Disjunction;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.criterion.MatchMode;
 
 import com.ecc.ems.Role;
 import com.ecc.ems.RoleDAOInterface;
@@ -27,18 +28,17 @@ public class RoleDAO extends BaseDAO<Role, Integer> implements RoleDAOInterface{
         List<Role> entities = null;
         
 	    Criteria crit = HibernateUtil.createAndGetCurrentSession().createCriteria(Role.class);
-	    Disjunction disj = Restrictions.disjunction();
 	    
 	    for(Role role : roles){
-	        disj.add(Restrictions.ne("role_name", role.getName()));
+	        crit.add(Restrictions.ne("name", role.getName()));
 	    }
-	    
-	    crit.add(disj);
 	    
 	    try{
             entities = crit.list();
+            System.out.println(entities.size());
             HibernateUtil.commit();
         }catch (HibernateException e) {
+            e.printStackTrace();
             HibernateUtil.rollback();
         }finally {
             HibernateUtil.closeCurrentSession();
