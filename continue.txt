@@ -1,2 +1,0 @@
-Continue on:
-    Implementing HibernateUtil on BaseDao
